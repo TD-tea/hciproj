@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
+import { LoginPage } from './components/LoginPage';
+import { TodoApp } from './components/TodoApp';
+import { FamilyPage } from './components/FamilyPage';
+import { CreateTaskPage } from './components/CreateTaskPage';
+import { User } from './types';
 import './App.css';
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [user, setUser] = useState<User | null>(null);
+
+    const handleLogin = (userData: User) => {
+        setUser(userData);
+    };
+
+    const handleSignup = (userData: User) => {
+        setUser(userData);
+    };
+
+    const handleLogout = () => {
+        setUser(null);
+    };
+
+    return user ? (
+        <TodoApp user={user} onLogout={handleLogout} />
+    ) : (
+        <LoginPage onLogin={handleLogin} onSignup={handleSignup} />
+    );
 }
 
 export default App;
