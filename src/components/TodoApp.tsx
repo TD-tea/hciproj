@@ -3,7 +3,6 @@ import { User, Task } from '../types';
 import { FamilyPage } from './FamilyPage';
 import { CreateTaskPage } from './CreateTaskPage';
 import { SettingsPage } from './SettingsPage';
-import { Tooltip } from './Tooltip';
 
 interface TodoAppProps {
     user: User;
@@ -28,6 +27,9 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
     const [language, setLanguage] = useState(() => {
         return localStorage.getItem('language') || 'en';
     });
+    const [showTooltips, setShowTooltips] = useState(() => {
+        return localStorage.getItem('showTooltips') === 'true';
+    });
 
     useEffect(() => {
         document.body.classList.toggle('dark-mode', darkMode);
@@ -37,6 +39,10 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
     useEffect(() => {
         localStorage.setItem('language', language);
     }, [language]);
+
+    useEffect(() => {
+        localStorage.setItem('showTooltips', showTooltips ? 'true' : 'false');
+    }, [showTooltips]);
 
     // Save tasks to localStorage whenever they change
     useEffect(() => {
@@ -85,9 +91,9 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
     const renderContent = () => {
         switch (page) {
             case 'family':
-                return <FamilyPage familyMembers={familyMembers} setFamilyMembers={setFamilyMembers} />;
+                return <FamilyPage familyMembers={familyMembers} setFamilyMembers={setFamilyMembers} showTooltips={showTooltips} />;
             case 'create':
-                return <CreateTaskPage familyMembers={familyMembers} onCreateTask={addTask} />;
+                return <CreateTaskPage familyMembers={familyMembers} onCreateTask={addTask} showTooltips={showTooltips} />;
             case 'settings':
                 return <SettingsPage language={language} onLanguageChange={setLanguage} />;
             case 'tasks':
@@ -97,7 +103,16 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                         <div className="leaderboard" style={{ marginBottom: 24 }}>
                             <h3 style={{ textAlign: 'center', margin: 0 }}>
                                 Leaderboard
-                                <Tooltip text="Track family members' progress! Points are earned by completing tasks. The member with the most points is highlighted in blue." />
+                                {showTooltips && (
+                                    <span style={{ 
+                                        fontSize: '0.8em', 
+                                        marginLeft: '8px', 
+                                        color: '#666',
+                                        fontStyle: 'italic'
+                                    }}>
+                                        (Shows points earned by each family member)
+                                    </span>
+                                )}
                             </h3>
                             <ul style={{ listStyle: 'none', padding: 0 }}>
                                 {leaderboard.map(({ member, points }, idx) => (
@@ -110,7 +125,16 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                         <div className="task-list">
                             <h3 style={{ marginBottom: 8 }}>
                                 Active Tasks
-                                <Tooltip text="Tasks that need to be completed. Click the checkmark to mark a task as complete, or the X to delete it." />
+                                {showTooltips && (
+                                    <span style={{ 
+                                        fontSize: '0.8em', 
+                                        marginLeft: '8px', 
+                                        color: '#666',
+                                        fontStyle: 'italic'
+                                    }}>
+                                        (Tasks that need to be completed)
+                                    </span>
+                                )}
                             </h3>
                             {activeTasks.length === 0 && <div>No active tasks.</div>}
                             {activeTasks.map(task => (
@@ -128,14 +152,14 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                                             <button 
                                                 onClick={() => completeTask(task.id)}
                                                 className="icon-button"
-                                                title="Mark as complete"
+                                                title={showTooltips ? "Mark task as completed" : undefined}
                                             >
                                                 ✓
                                             </button>
                                             <button 
                                                 onClick={() => deleteTask(task.id)}
                                                 className="icon-button"
-                                                title="Delete task"
+                                                title={showTooltips ? "Delete task" : undefined}
                                             >
                                                 ✕
                                             </button>
@@ -147,7 +171,16 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                         <div className="task-list" style={{ marginTop: 32 }}>
                             <h3 style={{ marginBottom: 8 }}>
                                 Completed Tasks
-                                <Tooltip text="Tasks that have been completed. These tasks contribute to the leaderboard points. You can delete them if needed." />
+                                {showTooltips && (
+                                    <span style={{ 
+                                        fontSize: '0.8em', 
+                                        marginLeft: '8px', 
+                                        color: '#666',
+                                        fontStyle: 'italic'
+                                    }}>
+                                        (Tasks that have been finished)
+                                    </span>
+                                )}
                             </h3>
                             {completedTasks.length === 0 && <div>No completed tasks.</div>}
                             {completedTasks.map(task => (
@@ -165,7 +198,7 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                                             <button 
                                                 onClick={() => deleteTask(task.id)}
                                                 className="icon-button"
-                                                title="Delete task"
+                                                title={showTooltips ? "Delete completed task" : undefined}
                                             >
                                                 ✕
                                             </button>
@@ -182,24 +215,38 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
     return (
         <div className="container">
             <div className="header">
-                <h1 className="title">HomeBase</h1>
-                <div className="user-info">
-                    <button onClick={onLogout} className="logout-button">Logout</button>
+                <h1 className="title">HB</h1>
+                <div className="user-info" style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
                     <button
                         className="add-button"
-                        style={{ marginLeft: 8 }}
+                        onClick={() => setShowTooltips(!showTooltips)}
+                        title={showTooltips ? 'Hide tooltips' : 'Show tooltips'}
+                        style={{ padding: '8px' }}
+                    >
+                        ❓
+                    </button>
+                    <button
+                        className="add-button"
                         onClick={() => setDarkMode(dm => !dm)}
                         title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                        style={{ padding: '8px' }}
                     >
                         {darkMode ? '☀️' : '🌙'}
                     </button>
                     <button
                         className="add-button"
-                        style={{ marginLeft: 8 }}
                         onClick={() => setPage('settings')}
                         title="Settings"
+                        style={{ padding: '8px' }}
                     >
                         ⚙️
+                    </button>
+                    <button 
+                        onClick={onLogout} 
+                        className="logout-button"
+                        title="Logout"
+                    >
+                        Logout
                     </button>
                 </div>
             </div>

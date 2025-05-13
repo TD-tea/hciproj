@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Tooltip } from './Tooltip';
 
 interface FamilyPageProps {
   familyMembers: string[];
   setFamilyMembers: (members: string[]) => void;
+  showTooltips?: boolean;
 }
 
-export function FamilyPage({ familyMembers, setFamilyMembers }: FamilyPageProps) {
+export function FamilyPage({ familyMembers, setFamilyMembers, showTooltips = false }: FamilyPageProps) {
   const [newMember, setNewMember] = useState('');
   const [error, setError] = useState('');
 
@@ -34,55 +34,92 @@ export function FamilyPage({ familyMembers, setFamilyMembers }: FamilyPageProps)
 
   return (
     <>
-      <h2 className="title">Family Members <Tooltip text="Add and manage family members who can be assigned tasks. Each member's completed tasks contribute to their points on the leaderboard." /></h2>
-      <form onSubmit={handleAddMember} className="form">
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <label style={{ color: 'var(--task-item-color)' }}>Add Family Member</label>
-          <Tooltip text="Enter the name of a family member to add them to the list. You can then assign tasks to them." />
-        </div>
+      <h2 className="title">
+        Family Members
+        {showTooltips && (
+          <span style={{ 
+            fontSize: '0.8em', 
+            marginLeft: '8px', 
+            color: '#666',
+            fontStyle: 'italic'
+          }}>
+            (Manage your family members who can be assigned tasks)
+          </span>
+        )}
+      </h2>
+      <form className="form" onSubmit={handleAddMember}>
+        <label style={{ color: 'var(--task-item-color)' }}>
+          Add Family Member
+          {showTooltips && (
+            <span style={{ 
+              fontSize: '0.8em', 
+              marginLeft: '8px', 
+              color: '#666',
+              fontStyle: 'italic'
+            }}>
+              (Enter the name of a new family member)
+            </span>
+          )}
+        </label>
         <div style={{ display: 'flex', gap: 8 }}>
           <input
+            className="input"
             type="text"
             value={newMember}
             onChange={(e) => setNewMember(e.target.value)}
             placeholder="Enter name"
-            className="input"
+            title={showTooltips ? "Type the name of the family member to add" : undefined}
           />
-          <button type="submit" className="add-button">Add</button>
+          <button 
+            type="submit" 
+            className="add-button"
+            title={showTooltips ? "Add the new family member" : undefined}
+          >
+            Add
+          </button>
         </div>
         {error && <div className="error">{error}</div>}
       </form>
 
       <div style={{ marginTop: 20 }}>
-        <h3 style={{ color: 'var(--task-item-color)', marginBottom: 12 }}>Family Members List <Tooltip text="View and manage your family members. Click the X button to remove a member. Note: Removing a member will not delete their completed tasks." /></h3>
+        <h3 style={{ marginBottom: 8 }}>
+          Current Family Members
+          {showTooltips && (
+            <span style={{ 
+              fontSize: '0.8em', 
+              marginLeft: '8px', 
+              color: '#666',
+              fontStyle: 'italic'
+            }}>
+              (Click ✕ to remove a family member)
+            </span>
+          )}
+        </h3>
         {familyMembers.length === 0 ? (
-          <div style={{ color: 'var(--task-item-color)', opacity: 0.7 }}>No family members added yet</div>
+          <div>No family members added yet.</div>
         ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <ul style={{ listStyle: 'none', padding: 0 }}>
             {familyMembers.map((member, index) => (
-              <div
-                key={index}
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
+              <li 
+                key={index} 
+                style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
                   alignItems: 'center',
-                  padding: '8px 12px',
-                  backgroundColor: 'var(--task-item-bg)',
-                  borderRadius: '6px',
-                  color: 'var(--task-item-color)'
+                  padding: '8px 0'
                 }}
               >
                 <span>{member}</span>
                 <button
                   onClick={() => handleRemoveMember(member)}
                   className="icon-button"
-                  style={{ color: '#ff4444' }}
+                  title={showTooltips ? `Remove ${member} from family members` : undefined}
                 >
                   ✕
                 </button>
-              </div>
+              </li>
             ))}
-          </div>
+          </ul>
         )}
       </div>
     </>
