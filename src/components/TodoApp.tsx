@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { User, Task } from '../types';
 import { FamilyPage } from './FamilyPage';
 import { CreateTaskPage } from './CreateTaskPage';
+import { SettingsPage } from './SettingsPage';
 
 interface TodoAppProps {
     user: User;
     onLogout: () => void;
 }
 
-type Page = 'tasks' | 'family' | 'create';
+type Page = 'tasks' | 'family' | 'create' | 'settings';
 
 function getSystemDarkMode() {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -23,11 +24,18 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
         if (stored !== null) return stored === 'true';
         return getSystemDarkMode();
     });
+    const [language, setLanguage] = useState(() => {
+        return localStorage.getItem('language') || 'en';
+    });
 
     useEffect(() => {
         document.body.classList.toggle('dark-mode', darkMode);
         localStorage.setItem('darkMode', darkMode ? 'true' : 'false');
     }, [darkMode]);
+
+    useEffect(() => {
+        localStorage.setItem('language', language);
+    }, [language]);
 
     // Save tasks to localStorage whenever they change
     useEffect(() => {
@@ -79,6 +87,8 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                 return <FamilyPage familyMembers={familyMembers} setFamilyMembers={setFamilyMembers} />;
             case 'create':
                 return <CreateTaskPage familyMembers={familyMembers} onCreateTask={addTask} />;
+            case 'settings':
+                return <SettingsPage language={language} onLanguageChange={setLanguage} />;
             case 'tasks':
             default:
                 return (
@@ -169,6 +179,14 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                         title={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
                     >
                         {darkMode ? '☀️' : '🌙'}
+                    </button>
+                    <button
+                        className="add-button"
+                        style={{ marginLeft: 8 }}
+                        onClick={() => setPage('settings')}
+                        title="Settings"
+                    >
+                        ⚙️
                     </button>
                 </div>
             </div>
