@@ -3,6 +3,7 @@ import { User, Task } from '../types';
 import { FamilyPage } from './FamilyPage';
 import { CreateTaskPage } from './CreateTaskPage';
 import { SettingsPage } from './SettingsPage';
+import { Tooltip } from './Tooltip';
 
 interface TodoAppProps {
     user: User;
@@ -94,7 +95,10 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                 return (
                     <>
                         <div className="leaderboard" style={{ marginBottom: 24 }}>
-                            <h3 style={{ textAlign: 'center', margin: 0 }}>Leaderboard</h3>
+                            <h3 style={{ textAlign: 'center', margin: 0 }}>
+                                Leaderboard
+                                <Tooltip text="Track family members' progress! Points are earned by completing tasks. The member with the most points is highlighted in blue." />
+                            </h3>
                             <ul style={{ listStyle: 'none', padding: 0 }}>
                                 {leaderboard.map(({ member, points }, idx) => (
                                     <li key={member} style={{ fontWeight: idx === 0 ? 'bold' : 'normal', color: idx === 0 ? '#1976d2' : 'var(--task-item-color)' }}>
@@ -104,7 +108,10 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                             </ul>
                         </div>
                         <div className="task-list">
-                            <h3 style={{ marginBottom: 8 }}>Active Tasks</h3>
+                            <h3 style={{ marginBottom: 8 }}>
+                                Active Tasks
+                                <Tooltip text="Tasks that need to be completed. Click the checkmark to mark a task as complete, or the X to delete it." />
+                            </h3>
                             {activeTasks.length === 0 && <div>No active tasks.</div>}
                             {activeTasks.map(task => (
                                 <div key={task.id} className="task-item">
@@ -121,12 +128,14 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                                             <button 
                                                 onClick={() => completeTask(task.id)}
                                                 className="icon-button"
+                                                title="Mark as complete"
                                             >
                                                 ✓
                                             </button>
                                             <button 
                                                 onClick={() => deleteTask(task.id)}
                                                 className="icon-button"
+                                                title="Delete task"
                                             >
                                                 ✕
                                             </button>
@@ -136,7 +145,10 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                             ))}
                         </div>
                         <div className="task-list" style={{ marginTop: 32 }}>
-                            <h3 style={{ marginBottom: 8 }}>Completed Tasks</h3>
+                            <h3 style={{ marginBottom: 8 }}>
+                                Completed Tasks
+                                <Tooltip text="Tasks that have been completed. These tasks contribute to the leaderboard points. You can delete them if needed." />
+                            </h3>
                             {completedTasks.length === 0 && <div>No completed tasks.</div>}
                             {completedTasks.map(task => (
                                 <div key={task.id} className="task-item" style={{ opacity: 0.7 }}>
@@ -153,6 +165,7 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                                             <button 
                                                 onClick={() => deleteTask(task.id)}
                                                 className="icon-button"
+                                                title="Delete task"
                                             >
                                                 ✕
                                             </button>

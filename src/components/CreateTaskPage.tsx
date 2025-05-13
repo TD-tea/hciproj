@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Task } from '../types';
+import { Tooltip } from './Tooltip';
 
 interface CreateTaskPageProps {
   familyMembers: string[];
@@ -45,9 +46,12 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
 
   return (
     <>
-      <h2 className="title">Create Task</h2>
+      <h2 className="title">Create Task <Tooltip text="Create new tasks and assign them to family members. Tasks can be worth different points based on their difficulty." /></h2>
       <form className="form" onSubmit={handleSubmit}>
-        <label style={{ color: 'var(--task-item-color)' }}>Task Name</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <label style={{ color: 'var(--task-item-color)' }}>Task Name</label>
+          <Tooltip text="Enter a task name or select from common tasks below. This is what will be displayed in the task list." />
+        </div>
         <input
           className="input"
           type="text"
@@ -68,7 +72,10 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
             </button>
           ))}
         </div>
-        <label style={{ color: 'var(--task-item-color)' }}>Task Points</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <label style={{ color: 'var(--task-item-color)' }}>Task Points</label>
+          <Tooltip text="Set how many points this task is worth. More difficult tasks should be worth more points. Points contribute to the leaderboard." />
+        </div>
         <input
           className="points-input"
           type="number"
@@ -89,7 +96,10 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
             </button>
           ))}
         </div>
-        <label style={{ color: 'var(--task-item-color)' }}>Assign Task</label>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <label style={{ color: 'var(--task-item-color)' }}>Assign Task</label>
+          <Tooltip text="Select which family member should complete this task. Make sure to add family members in the Family Members page first." />
+        </div>
         <select
           className="input"
           value={assignedTo}
