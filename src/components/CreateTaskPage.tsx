@@ -1,3 +1,14 @@
+/**
+ * CreateTaskPage Component
+ * 
+ * Provides an interface for creating new tasks in the application.
+ * Allows users to specify task details including name, points, and assigned family member.
+ * Includes quick-select options for common tasks and point values.
+ * 
+ * @author Thinh Dang
+ * @component
+ */
+
 import React, { useState } from 'react';
 import { Task } from '../types';
 
@@ -60,6 +71,7 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
         )}
       </h2>
       <form className="form" onSubmit={handleSubmit}>
+        {/* Task name input with quick-select buttons for common tasks */}
         <label style={{ color: 'var(--task-item-color)' }}>
           Task Name
           {showTooltips && (
@@ -81,6 +93,7 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
           placeholder="Type or select a task"
           title={showTooltips ? "Enter the name of the task" : undefined}
         />
+        {/* Quick-select buttons for common household tasks */}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {commonTasks.map((t, i) => (
             <button
@@ -95,6 +108,8 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
             </button>
           ))}
         </div>
+
+        {/* Points input with quick-select buttons for common point values */}
         <label style={{ color: 'var(--task-item-color)' }}>
           Task Points
           {showTooltips && (
@@ -116,6 +131,7 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
           onChange={e => setPoints(Number(e.target.value))}
           title={showTooltips ? "Set the number of points for this task" : undefined}
         />
+        {/* Quick-select buttons for common point values */}
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
           {[5, 10, 15, 20, 25].map((value) => (
             <button
@@ -130,6 +146,8 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
             </button>
           ))}
         </div>
+
+        {/* Family member selection dropdown */}
         <label style={{ color: 'var(--task-item-color)' }}>
           Assign Task
           {showTooltips && (
@@ -155,6 +173,8 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
             <option key={idx} value={member}>{member}</option>
           ))}
         </select>
+
+        {/* Submit button to create the task */}
         <button 
           className="add-button" 
           type="submit"

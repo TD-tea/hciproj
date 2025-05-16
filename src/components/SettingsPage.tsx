@@ -1,3 +1,13 @@
+/**
+ * SettingsPage Component
+ * 
+ * Provides user interface for managing application settings.
+ * Currently supports language selection with multiple language options.
+ * 
+ * @author Thinh Dang
+ * @component
+ */
+
 import React from 'react';
 
 interface SettingsPageProps {
@@ -10,6 +20,7 @@ export function SettingsPage({ language, onLanguageChange }: SettingsPageProps) 
         <>
             <h2 className="title">Settings</h2>
             <div className="form">
+                {/* Language selection dropdown with multiple options */}
                 <div style={{ marginBottom: 20 }}>
                     <label style={{ color: 'var(--task-item-color)', display: 'block', marginBottom: 8 }}>
                         Language

@@ -1,3 +1,13 @@
+/**
+ * LoginPage Component
+ * 
+ * Handles user authentication including login and signup functionality.
+ * Provides a form for users to enter their credentials and manages the authentication state.
+ * 
+ * @author Thinh Dang
+ * @component
+ */
+
 import React, { useState } from 'react';
 import { User } from '../types';
 

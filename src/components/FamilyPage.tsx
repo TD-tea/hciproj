@@ -1,3 +1,13 @@
+/**
+ * FamilyPage Component
+ * 
+ * A component that manages family members who can be assigned tasks in the application.
+ * Allows users to add and remove family members from the system.
+ * 
+ * @author Thinh Dang
+ * @component
+ */
+
 import React, { useState } from 'react';
 
 interface FamilyPageProps {
@@ -47,6 +57,7 @@ export function FamilyPage({ familyMembers, setFamilyMembers, showTooltips = fal
           </span>
         )}
       </h2>
+      {/* Form for adding new family members */}
       <form className="form" onSubmit={handleAddMember}>
         <label style={{ color: 'var(--task-item-color)' }}>
           Add Family Member
@@ -61,6 +72,7 @@ export function FamilyPage({ familyMembers, setFamilyMembers, showTooltips = fal
             </span>
           )}
         </label>
+        {/* Input field and add button for new family members */}
         <div style={{ display: 'flex', gap: 8 }}>
           <input
             className="input"
@@ -81,6 +93,7 @@ export function FamilyPage({ familyMembers, setFamilyMembers, showTooltips = fal
         {error && <div className="error">{error}</div>}
       </form>
 
+      {/* List of current family members with remove buttons */}
       <div style={{ marginTop: 20 }}>
         <h3 style={{ marginBottom: 8 }}>
           Current Family Members
@@ -110,6 +123,7 @@ export function FamilyPage({ familyMembers, setFamilyMembers, showTooltips = fal
                 }}
               >
                 <span>{member}</span>
+                {/* Remove button for each family member */}
                 <button
                   onClick={() => handleRemoveMember(member)}
                   className="icon-button"
