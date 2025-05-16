@@ -10,6 +10,49 @@
 
 import React, { useState } from 'react';
 
+// Tooltip component
+const Tooltip = ({ text, children }: { text: string, children: React.ReactNode }) => {
+    const [show, setShow] = useState(false);
+
+    return (
+        <div 
+            style={{ position: 'relative', display: 'inline-block' }}
+            onMouseEnter={() => setShow(true)}
+            onMouseLeave={() => setShow(false)}
+        >
+            {children}
+            {show && (
+                <div style={{
+                    position: 'absolute',
+                    bottom: '100%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    backgroundColor: 'var(--input-bg)',
+                    color: 'var(--task-item-color)',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    fontSize: '14px',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                    zIndex: 1000,
+                    marginBottom: '8px',
+                    border: '1px solid var(--task-item-color)'
+                }}>
+                    {text}
+                    <div style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        border: '6px solid transparent',
+                        borderTopColor: 'var(--input-bg)'
+                    }} />
+                </div>
+            )}
+        </div>
+    );
+};
+
 interface FamilyPageProps {
   familyMembers: string[];
   setFamilyMembers: (members: string[]) => void;
@@ -47,14 +90,17 @@ export function FamilyPage({ familyMembers, setFamilyMembers, showTooltips = fal
       <h2 className="title">
         Family Members
         {showTooltips && (
-          <span style={{ 
-            fontSize: '0.8em', 
-            marginLeft: '8px', 
-            color: '#666',
-            fontStyle: 'italic'
-          }}>
-            (Manage your family members who can be assigned tasks)
-          </span>
+          <Tooltip text="Manage your family members who can be assigned tasks">
+            <span style={{ 
+              fontSize: '0.8em', 
+              marginLeft: '8px', 
+              color: '#666',
+              fontStyle: 'italic',
+              cursor: 'help'
+            }}>
+              ℹ️
+            </span>
+          </Tooltip>
         )}
       </h2>
       {/* Form for adding new family members */}
@@ -62,14 +108,17 @@ export function FamilyPage({ familyMembers, setFamilyMembers, showTooltips = fal
         <label style={{ color: 'var(--task-item-color)' }}>
           Add Family Member
           {showTooltips && (
-            <span style={{ 
-              fontSize: '0.8em', 
-              marginLeft: '8px', 
-              color: '#666',
-              fontStyle: 'italic'
-            }}>
-              (Enter the name of a new family member)
-            </span>
+            <Tooltip text="Enter the name of a new family member">
+              <span style={{ 
+                fontSize: '0.8em', 
+                marginLeft: '8px', 
+                color: '#666',
+                fontStyle: 'italic',
+                cursor: 'help'
+              }}>
+                ℹ️
+              </span>
+            </Tooltip>
           )}
         </label>
         {/* Input field and add button for new family members */}
@@ -98,14 +147,17 @@ export function FamilyPage({ familyMembers, setFamilyMembers, showTooltips = fal
         <h3 style={{ marginBottom: 8 }}>
           Current Family Members
           {showTooltips && (
-            <span style={{ 
-              fontSize: '0.8em', 
-              marginLeft: '8px', 
-              color: '#666',
-              fontStyle: 'italic'
-            }}>
-              (Click ✕ to remove a family member)
-            </span>
+            <Tooltip text="Click ✕ to remove a family member">
+              <span style={{ 
+                fontSize: '0.8em', 
+                marginLeft: '8px', 
+                color: '#666',
+                fontStyle: 'italic',
+                cursor: 'help'
+              }}>
+                ℹ️
+              </span>
+            </Tooltip>
           )}
         </h3>
         {familyMembers.length === 0 ? (

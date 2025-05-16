@@ -36,6 +36,49 @@ function getSystemDarkMode() {
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
 }
 
+// Tooltip component
+const Tooltip = ({ text, children }: { text: string, children: React.ReactNode }) => {
+    const [show, setShow] = useState(false);
+
+    return (
+        <div 
+            style={{ position: 'relative', display: 'inline-block' }}
+            onMouseEnter={() => setShow(true)}
+            onMouseLeave={() => setShow(false)}
+        >
+            {children}
+            {show && (
+                <div style={{
+                    position: 'absolute',
+                    bottom: '100%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    backgroundColor: 'var(--input-bg)',
+                    color: 'var(--task-item-color)',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    fontSize: '14px',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                    zIndex: 1000,
+                    marginBottom: '8px',
+                    border: '1px solid var(--task-item-color)'
+                }}>
+                    {text}
+                    <div style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        border: '6px solid transparent',
+                        borderTopColor: 'var(--input-bg)'
+                    }} />
+                </div>
+            )}
+        </div>
+    );
+};
+
 export function TodoApp({ user, onLogout }: TodoAppProps) {
     const [tasks, setTasks] = useState<Task[]>(user.tasks || []);
     const [familyMembers, setFamilyMembers] = useState<string[]>([]);
@@ -224,14 +267,17 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                             <h3 style={{ textAlign: 'center', margin: 0 }}>
                                 Leaderboard
                                 {showTooltips && (
-                                    <span style={{ 
-                                        fontSize: '0.8em', 
-                                        marginLeft: '8px', 
-                                        color: '#666',
-                                        fontStyle: 'italic'
-                                    }}>
-                                        (Shows points earned by each family member)
-                                    </span>
+                                    <Tooltip text="Shows points earned by each family member">
+                                        <span style={{ 
+                                            fontSize: '0.8em', 
+                                            marginLeft: '8px', 
+                                            color: '#666',
+                                            fontStyle: 'italic',
+                                            cursor: 'help'
+                                        }}>
+                                            ℹ️
+                                        </span>
+                                    </Tooltip>
                                 )}
                             </h3>
                             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -246,14 +292,17 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                             <h3 style={{ marginBottom: 8 }}>
                                 Active Tasks
                                 {showTooltips && (
-                                    <span style={{ 
-                                        fontSize: '0.8em', 
-                                        marginLeft: '8px', 
-                                        color: '#666',
-                                        fontStyle: 'italic'
-                                    }}>
-                                        (Tasks that need to be completed)
-                                    </span>
+                                    <Tooltip text="Tasks that need to be completed">
+                                        <span style={{ 
+                                            fontSize: '0.8em', 
+                                            marginLeft: '8px', 
+                                            color: '#666',
+                                            fontStyle: 'italic',
+                                            cursor: 'help'
+                                        }}>
+                                            ℹ️
+                                        </span>
+                                    </Tooltip>
                                 )}
                             </h3>
                             {activeTasks.length === 0 && <div>No active tasks.</div>}
@@ -299,14 +348,17 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                             <h3 style={{ marginBottom: 8 }}>
                                 Completed Tasks
                                 {showTooltips && (
-                                    <span style={{ 
-                                        fontSize: '0.8em', 
-                                        marginLeft: '8px', 
-                                        color: '#666',
-                                        fontStyle: 'italic'
-                                    }}>
-                                        (Tasks that have been finished)
-                                    </span>
+                                    <Tooltip text="Tasks that have been finished">
+                                        <span style={{ 
+                                            fontSize: '0.8em', 
+                                            marginLeft: '8px', 
+                                            color: '#666',
+                                            fontStyle: 'italic',
+                                            cursor: 'help'
+                                        }}>
+                                            ℹ️
+                                        </span>
+                                    </Tooltip>
                                 )}
                             </h3>
                             {completedTasks.length === 0 && <div>No completed tasks.</div>}
@@ -465,28 +517,34 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                         <h2 className="title" style={{ fontSize: '1.5rem', marginBottom: '15px' }}>
                             Edit Task
                             {showTooltips && (
-                                <span style={{ 
-                                    fontSize: '0.8em', 
-                                    marginLeft: '8px', 
-                                    color: '#666',
-                                    fontStyle: 'italic'
-                                }}>
-                                    (Modify task details)
-                                </span>
+                                <Tooltip text="Modify task details">
+                                    <span style={{ 
+                                        fontSize: '0.8em', 
+                                        marginLeft: '8px', 
+                                        color: '#666',
+                                        fontStyle: 'italic',
+                                        cursor: 'help'
+                                    }}>
+                                        ℹ️
+                                    </span>
+                                </Tooltip>
                             )}
                         </h2>
                         <div className="form" style={{ padding: '10px 10px' }}>
                             <label style={{ color: 'var(--task-item-color)', fontWeight: 'bold', marginTop: '10px' }}>
                                 Task Name
                                 {showTooltips && (
-                                    <span style={{ 
-                                        fontSize: '0.8em', 
-                                        marginLeft: '8px', 
-                                        color: '#666',
-                                        fontStyle: 'italic'
-                                    }}>
-                                        (Type or select a common task)
-                                    </span>
+                                    <Tooltip text="Type or select a common task">
+                                        <span style={{ 
+                                            fontSize: '0.8em', 
+                                            marginLeft: '8px', 
+                                            color: '#666',
+                                            fontStyle: 'italic',
+                                            cursor: 'help'
+                                        }}>
+                                            ℹ️
+                                        </span>
+                                    </Tooltip>
                                 )}
                             </label>
                             <input
@@ -515,14 +573,17 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                             <label style={{ color: 'var(--task-item-color)', fontWeight: 'bold' }}>
                                 Task Points
                                 {showTooltips && (
-                                    <span style={{ 
-                                        fontSize: '0.8em', 
-                                        marginLeft: '8px', 
-                                        color: '#666',
-                                        fontStyle: 'italic'
-                                    }}>
-                                        (Points earned for completing this task)
-                                    </span>
+                                    <Tooltip text="Points earned for completing this task">
+                                        <span style={{ 
+                                            fontSize: '0.8em', 
+                                            marginLeft: '8px', 
+                                            color: '#666',
+                                            fontStyle: 'italic',
+                                            cursor: 'help'
+                                        }}>
+                                            ℹ️
+                                        </span>
+                                    </Tooltip>
                                 )}
                             </label>
                             <input
@@ -551,14 +612,17 @@ export function TodoApp({ user, onLogout }: TodoAppProps) {
                             <label style={{ color: 'var(--task-item-color)', fontWeight: 'bold' }}>
                                 Assign Task
                                 {showTooltips && (
-                                    <span style={{ 
-                                        fontSize: '0.8em', 
-                                        marginLeft: '8px', 
-                                        color: '#666',
-                                        fontStyle: 'italic'
-                                    }}>
-                                        (Select who will complete this task)
-                                    </span>
+                                    <Tooltip text="Select who will complete this task">
+                                        <span style={{ 
+                                            fontSize: '0.8em', 
+                                            marginLeft: '8px', 
+                                            color: '#666',
+                                            fontStyle: 'italic',
+                                            cursor: 'help'
+                                        }}>
+                                            ℹ️
+                                        </span>
+                                    </Tooltip>
                                 )}
                             </label>
                             <select

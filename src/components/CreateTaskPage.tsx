@@ -27,6 +27,49 @@ const defaultCommonTasks = [
   'Take out trash',
 ];
 
+// Tooltip component
+const Tooltip = ({ text, children }: { text: string, children: React.ReactNode }) => {
+    const [show, setShow] = useState(false);
+
+    return (
+        <div 
+            style={{ position: 'relative', display: 'inline-block' }}
+            onMouseEnter={() => setShow(true)}
+            onMouseLeave={() => setShow(false)}
+        >
+            {children}
+            {show && (
+                <div style={{
+                    position: 'absolute',
+                    bottom: '100%',
+                    left: '50%',
+                    transform: 'translateX(-50%)',
+                    backgroundColor: 'var(--input-bg)',
+                    color: 'var(--task-item-color)',
+                    padding: '8px 12px',
+                    borderRadius: '4px',
+                    fontSize: '14px',
+                    whiteSpace: 'nowrap',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                    zIndex: 1000,
+                    marginBottom: '8px',
+                    border: '1px solid var(--task-item-color)'
+                }}>
+                    {text}
+                    <div style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        border: '6px solid transparent',
+                        borderTopColor: 'var(--input-bg)'
+                    }} />
+                </div>
+            )}
+        </div>
+    );
+};
+
 export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defaultCommonTasks, showTooltips = false }: CreateTaskPageProps) {
   const [taskName, setTaskName] = useState('');
   const [points, setPoints] = useState(1);
@@ -60,14 +103,17 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
       <h2 className="title">
         Create Task
         {showTooltips && (
-          <span style={{ 
-            fontSize: '0.8em', 
-            marginLeft: '8px', 
-            color: '#666',
-            fontStyle: 'italic'
-          }}>
-            (Create new tasks for family members)
-          </span>
+          <Tooltip text="Create new tasks for family members">
+            <span style={{ 
+              fontSize: '0.8em', 
+              marginLeft: '8px', 
+              color: '#666',
+              fontStyle: 'italic',
+              cursor: 'help'
+            }}>
+              ℹ️
+            </span>
+          </Tooltip>
         )}
       </h2>
       <form className="form" onSubmit={handleSubmit}>
@@ -75,14 +121,17 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
         <label style={{ color: 'var(--task-item-color)' }}>
           Task Name
           {showTooltips && (
-            <span style={{ 
-              fontSize: '0.8em', 
-              marginLeft: '8px', 
-              color: '#666',
-              fontStyle: 'italic'
-            }}>
-              (Type or select a common task)
-            </span>
+            <Tooltip text="Type or select a common task">
+              <span style={{ 
+                fontSize: '0.8em', 
+                marginLeft: '8px', 
+                color: '#666',
+                fontStyle: 'italic',
+                cursor: 'help'
+              }}>
+                ℹ️
+              </span>
+            </Tooltip>
           )}
         </label>
         <input
@@ -113,14 +162,17 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
         <label style={{ color: 'var(--task-item-color)' }}>
           Task Points
           {showTooltips && (
-            <span style={{ 
-              fontSize: '0.8em', 
-              marginLeft: '8px', 
-              color: '#666',
-              fontStyle: 'italic'
-            }}>
-              (Points earned for completing this task)
-            </span>
+            <Tooltip text="Points earned for completing this task">
+              <span style={{ 
+                fontSize: '0.8em', 
+                marginLeft: '8px', 
+                color: '#666',
+                fontStyle: 'italic',
+                cursor: 'help'
+              }}>
+                ℹ️
+              </span>
+            </Tooltip>
           )}
         </label>
         <input
@@ -151,14 +203,17 @@ export function CreateTaskPage({ familyMembers, onCreateTask, commonTasks = defa
         <label style={{ color: 'var(--task-item-color)' }}>
           Assign Task
           {showTooltips && (
-            <span style={{ 
-              fontSize: '0.8em', 
-              marginLeft: '8px', 
-              color: '#666',
-              fontStyle: 'italic'
-            }}>
-              (Select who will complete this task)
-            </span>
+            <Tooltip text="Select who will complete this task">
+              <span style={{ 
+                fontSize: '0.8em', 
+                marginLeft: '8px', 
+                color: '#666',
+                fontStyle: 'italic',
+                cursor: 'help'
+              }}>
+                ℹ️
+              </span>
+            </Tooltip>
           )}
         </label>
         <select
